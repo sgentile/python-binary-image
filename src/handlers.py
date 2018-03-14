@@ -32,7 +32,18 @@ async def imageHandler(request):
     status=200
   )
   await resp.prepare(request)
-  await resp.write(generate_random_image())
+  width = 128
+  if request.query.get('width') is not None:
+    width = int(request.query.get('width'))
+    if width > 256:
+      width = 256
+  height = 128
+  if request.query.get('height') is not None:
+    height = int(request.query.get('height'))
+    if height > 256:
+      width = 256
+  print("request for image with width of %s and height of %s" % (width, height))  
+  await resp.write(generate_random_image(width=width,height=height))
   return resp
 
 
